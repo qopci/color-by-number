@@ -1098,8 +1098,9 @@ h2 {
 
 @media (min-width: 771px) {
   body {
-    animation: none;
-    background-position: 50% 50%;
+    background-size: 400% 400%;
+    animation: pastel-rgb-shift 30s ease-in-out infinite;
+    background-position: 0% 50%;
   }
 
   #pixel-grid .pixel,
