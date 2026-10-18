@@ -5,49 +5,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#c9c6f5">
+
     <title>Pixel Colors — Color by Number</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link
         href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Press+Start+2P&display=swap"
         rel="stylesheet">
+
+    <link rel="icon" type="image/webp" href="images/palette.webp">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <main class="app-shell">
+
+        <!-- Gallery Panel -->
         <aside class="panel gallery-panel">
             <header class="brand">
-                <div class="brand-title">Pixel Colors</span><span class="heart">♥</span></div>
+                <div class="brand-title">
+                    Pixel Colors <span class="heart">♥</span>
+                </div>
                 <p>Color by Number</p>
             </header>
 
             <div class="gallery-controls">
                 <div class="filter-tabs" role="group" aria-label="Filter pictures">
-                    <button class="filter-tab active" data-filter="all">All</button>
-                    <button class="filter-tab" data-filter="favorites">♡ Favorites</button>
+                    <button class="filter-tab active" data-filter="all">
+                        All
+                    </button>
+
+                    <button class="filter-tab" data-filter="favorites">
+                        ♡ Favorites
+                    </button>
                 </div>
             </div>
 
             <div id="gallery" class="gallery-grid" aria-label="Choose a picture"></div>
+
             <footer class="gallery-footer">
-                <button id="prev-page" class="page-arrow" aria-label="Previous page">‹</button>
+                <button id="prev-page" class="page-arrow" aria-label="Previous page">
+                    ‹
+                </button>
+
                 <span id="page-count">1 / 2</span>
-                <button id="next-page" class="page-arrow" aria-label="Next page">›</button>
+
+                <button id="next-page" class="page-arrow" aria-label="Next page">
+                    ›
+                </button>
             </footer>
         </aside>
 
+        <!-- Coloring Canvas Panel -->
         <section class="panel canvas-panel">
             <header class="canvas-header">
                 <div class="puzzle-title-wrap">
-                    <button id="back-to-gallery" class="back-button" aria-label="Back to gallery">‹</button>
+                    <button id="back-to-gallery" class="back-button" aria-label="Back to gallery">
+                        ‹
+                    </button>
+
                     <div>
                         <h1 id="puzzle-title">Cute Cat</h1>
                         <p id="puzzle-subtitle">A little pixel friend</p>
                     </div>
                 </div>
+
                 <div class="progress-wrap">
                     <span id="progress-label">0 / 100</span>
+
                     <div class="progress-track">
                         <div id="progress-bar" class="progress-bar"></div>
                     </div>
@@ -57,37 +84,76 @@
             <div class="canvas-scroll">
                 <div id="pixel-grid" class="pixel-grid" role="grid" aria-label="Coloring grid"></div>
             </div>
+
             <div class="canvas-bottom">
-                <span id="status-message">Choose a color, then tap matching numbers!</span>
-                <button id="hint-button" class="text-button">✦ Hint</button>
+                <span id="status-message">
+                    Choose a color, then tap matching numbers!
+                </span>
+
+                <button id="hint-button" class="text-button">
+                    ✦ Hint
+                </button>
             </div>
+
             <div id="completion-banner" class="completion-banner" hidden>
                 <span class="completion-icon">✦</span>
-                <div><strong>Picture complete!</strong><span>You made something adorable.</span></div>
+
+                <div>
+                    <strong>Picture complete!</strong>
+                    <span>You made something adorable.</span>
+                </div>
+
                 <button id="keep-coloring">Yay!</button>
             </div>
         </section>
 
+        <!-- Color Palette Panel -->
         <aside class="panel palette-panel">
-            <header class="palette-heading"><span class="palette-icon">◉</span>
+            <header class="palette-heading">
+                <span class="palette-icon">◉</span>
                 <h2>Color Palette</h2>
             </header>
-            <p class="palette-instruction">Pick a number to color its pixels.</p>
+
+            <p class="palette-instruction">
+                Pick a number to color its pixels.
+            </p>
+
             <div id="palette-list" class="palette-list"></div>
+
             <div class="tool-buttons">
-                <button id="fill-button" class="tool-button primary"><span>✎</span> Fill color</button>
-                <button id="eraser-button" class="tool-button"><span>◇</span> Eraser</button>
-                <button id="reset-button" class="tool-button"><span>↻</span> Reset picture</button>
+                <button id="fill-button" class="tool-button primary">
+                    <span>✎</span> Fill color
+                </button>
+
+                <button id="eraser-button" class="tool-button">
+                    <span>◇</span> Eraser
+                </button>
+
+                <button id="reset-button" class="tool-button">
+                    <span>↻</span> Reset picture
+                </button>
             </div>
-            <div class="tip-card"><span class="tip-icon">☼</span>
-                <p><strong>Little tip!</strong><br>Click a number in the palette, then tap matching pixels. You can also
-                    use Fill color to fill every matching square at once.</p>
+
+            <div class="tip-card">
+                <span class="tip-icon">☼</span>
+
+                <p>
+                    <strong>Little tip!</strong><br>
+                    Click a number in the palette, then tap matching pixels.
+                    You can also use Fill color to fill every matching square
+                    at once.
+                </p>
             </div>
-            <div class="save-note"><span class="save-dot"></span> Your progress saves automatically</div>
+
+            <div class="save-note">
+                <span class="save-dot"></span>
+                Your progress saves automatically
+            </div>
         </aside>
+
     </main>
+    
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script src="script.js"></script>
 </body>
-
 </html>

@@ -1,15 +1,7 @@
-
-
-
-
-
-
 "use strict";
 
-// Pixel Colors — complete game logic
-// Supports free coloring, drag painting, erasing, and saved progress.
-
 const SIZE = 24;
+const PAGE_SIZE = 8;
 const STORAGE_KEY = "pixel-colors-progress-v1";
 const FAVORITES_KEY = "pixel-colors-favorites-v1";
 
@@ -26,16 +18,11 @@ const $ = selector => document.querySelector(selector);
 
 function readJSON(key, fallback) {
     try {
-        const value = localStorage.getItem(key);
-        return value ? JSON.parse(value) : fallback;
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
     } catch {
         return fallback;
     }
 }
-
-// --------------------------------------------------
-// PIXEL ART GENERATION
-// --------------------------------------------------
 
 function blankGrid() {
     return Array(SIZE * SIZE).fill(4);
@@ -65,36 +52,28 @@ function paintEllipse(grid, color, centerRow, centerCol, radiusRow, radiusCol) {
     }
 }
 
+// --------------------------------------------------
+// ARTWORKS
+// --------------------------------------------------
+
 function makeCat() {
     const grid = blankGrid();
 
-    paintEllipse(grid, 3, 12, 12, 8, 8);
-    paintRect(grid, 3, 4, 5, 7, 8);
-    paintRect(grid, 3, 4, 15, 7, 18);
-    paintRect(grid, 5, 4, 5, 5, 7);
-    paintRect(grid, 5, 4, 16, 5, 18);
-    paintRect(grid, 2, 5, 6, 6, 6);
-    paintRect(grid, 2, 5, 17, 6, 17);
+    paintEllipse(grid, 5, 13, 12, 8, 8);
+    paintRect(grid, 5, 5, 5, 8, 8);
+    paintRect(grid, 5, 5, 15, 8, 18);
+    paintRect(grid, 2, 6, 6, 7, 7);
+    paintRect(grid, 2, 6, 16, 7, 17);
 
-    paintEllipse(grid, 4, 12, 12, 6, 6);
-    paintRect(grid, 5, 7, 10, 8, 10);
-    paintRect(grid, 5, 7, 13, 8, 13);
-    paintRect(grid, 5, 9, 11, 9, 12);
-
-    paintEllipse(grid, 1, 14, 12, 4, 5);
-    paintEllipse(grid, 1, 15, 9, 2, 2);
-    paintEllipse(grid, 1, 15, 15, 2, 2);
-    paintEllipse(grid, 2, 15, 7, 1.4, 2);
-    paintEllipse(grid, 2, 15, 17, 1.4, 2);
-
-    paintRect(grid, 6, 11, 8, 12, 8);
-    paintRect(grid, 6, 11, 15, 12, 15);
+    paintEllipse(grid, 1, 13, 12, 5, 6);
+    paintRect(grid, 6, 10, 9, 10, 9);
+    paintRect(grid, 6, 10, 14, 10, 14);
     paintRect(grid, 2, 14, 11, 14, 12);
     paintRect(grid, 6, 15, 11, 15, 12);
     paintRect(grid, 6, 16, 11, 16, 12);
 
-    paintRect(grid, 5, 14, 5, 14, 8);
-    paintRect(grid, 5, 14, 15, 14, 18);
+    paintEllipse(grid, 2, 15, 8, 1, 2);
+    paintEllipse(grid, 2, 15, 16, 1, 2);
     paintRect(grid, 3, 18, 8, 19, 15);
 
     return grid;
@@ -103,18 +82,16 @@ function makeCat() {
 function makeFlower() {
     const grid = blankGrid();
 
-    paintEllipse(grid, 3, 10, 12, 5, 5);
-    paintEllipse(grid, 2, 7, 12, 3, 3);
-    paintEllipse(grid, 2, 10, 8, 3, 3);
-    paintEllipse(grid, 2, 13, 12, 3, 3);
-    paintEllipse(grid, 2, 10, 16, 3, 3);
-    paintEllipse(grid, 2, 7, 15, 3, 3);
-    paintEllipse(grid, 5, 10, 12, 2, 2);
+    paintEllipse(grid, 2, 8, 12, 3, 3);
+    paintEllipse(grid, 2, 11, 8, 3, 3);
+    paintEllipse(grid, 2, 14, 12, 3, 3);
+    paintEllipse(grid, 2, 11, 16, 3, 3);
+    paintEllipse(grid, 2, 11, 12, 2, 2);
 
     paintRect(grid, 3, 13, 11, 21, 12);
-    paintEllipse(grid, 3, 18, 10, 2, 3);
-    paintEllipse(grid, 3, 18, 14, 2, 3);
-    paintRect(grid, 6, 19, 11, 19, 12);
+    paintEllipse(grid, 3, 17, 9, 2, 3);
+    paintEllipse(grid, 3, 18, 15, 2, 3);
+    paintRect(grid, 6, 18, 11, 18, 12);
     paintRect(grid, 6, 19, 14, 19, 15);
 
     return grid;
@@ -123,18 +100,34 @@ function makeFlower() {
 function makeBunny() {
     const grid = blankGrid();
 
-    paintEllipse(grid, 1, 15, 12, 6, 6);
-    paintEllipse(grid, 1, 6, 9, 5, 2);
-    paintEllipse(grid, 1, 6, 15, 5, 2);
+    paintEllipse(grid, 5, 15, 13, 6, 6);
+    paintEllipse(grid, 5, 6, 9, 5, 2);
+    paintEllipse(grid, 5, 6, 15, 5, 2);
     paintEllipse(grid, 2, 6, 9, 4, 1);
     paintEllipse(grid, 2, 6, 15, 4, 1);
 
-    paintEllipse(grid, 2, 14, 8, 1, 2);
-    paintEllipse(grid, 2, 14, 16, 1, 2);
-    paintRect(grid, 6, 13, 9, 14, 9);
-    paintRect(grid, 6, 13, 14, 14, 14);
-    paintRect(grid, 2, 15, 11, 15, 12);
+    paintEllipse(grid, 1, 14, 8, 1, 2);
+    paintEllipse(grid, 1, 14, 16, 1, 2);
+    paintRect(grid, 6, 13, 9, 13, 9);
+    paintRect(grid, 6, 13, 15, 13, 15);
+    paintRect(grid, 2, 15, 12, 15, 12);
     paintRect(grid, 6, 16, 11, 16, 12);
+
+    return grid;
+}
+
+function makeMushroom() {
+    const grid = blankGrid();
+
+    paintEllipse(grid, 2, 9, 10, 5, 7);
+    paintRect(grid, 2, 8, 7, 10, 14);
+    paintRect(grid, 1, 12, 9, 18, 12);
+    paintEllipse(grid, 1, 14, 10, 1, 1);
+    paintEllipse(grid, 1, 15, 13, 1, 1);
+    paintEllipse(grid, 1, 9, 7, 1, 1);
+    paintEllipse(grid, 1, 7, 10, 1, 1);
+    paintEllipse(grid, 1, 9, 15, 1, 1);
+    paintRect(grid, 3, 19, 6, 20, 17);
 
     return grid;
 }
@@ -158,24 +151,6 @@ function makeFrog() {
     return grid;
 }
 
-function makeMushroom() {
-    const grid = blankGrid();
-
-    paintEllipse(grid, 2, 9, 12, 5, 7);
-    paintRect(grid, 2, 8, 7, 10, 16);
-    paintRect(grid, 1, 12, 9, 18, 14);
-
-    paintRect(grid, 1, 15, 11, 16, 13);
-    paintRect(grid, 6, 13, 11, 14, 11);
-    paintRect(grid, 6, 13, 13, 14, 13);
-
-    paintEllipse(grid, 3, 19, 7, 1, 2);
-    paintEllipse(grid, 3, 19, 17, 1, 2);
-    paintRect(grid, 3, 20, 7, 20, 16);
-
-    return grid;
-}
-
 function makeButterfly() {
     const grid = blankGrid();
 
@@ -183,57 +158,304 @@ function makeButterfly() {
     paintEllipse(grid, 3, 8, 16, 5, 5);
     paintEllipse(grid, 2, 15, 8, 4, 4);
     paintEllipse(grid, 2, 15, 16, 4, 4);
-
     paintRect(grid, 5, 7, 11, 16, 12);
     paintRect(grid, 6, 6, 10, 6, 9);
     paintRect(grid, 6, 6, 14, 6, 15);
 
-    paintRect(grid, 1, 7, 7, 8, 8);
-    paintRect(grid, 1, 7, 15, 8, 16);
-    paintRect(grid, 4, 14, 6, 14, 7);
-    paintRect(grid, 4, 14, 16, 14, 17);
+    paintEllipse(grid, 1, 8, 8, 1, 1);
+    paintEllipse(grid, 1, 8, 16, 1, 1);
+    paintEllipse(grid, 1, 15, 8, 1, 1);
+    paintEllipse(grid, 1, 15, 16, 1, 1);
 
     return grid;
 }
+
 
 function makeCherries() {
     const grid = blankGrid();
 
-    paintRect(grid, 3, 5, 10, 7, 12);
-    paintRect(grid, 3, 6, 8, 8, 13);
-    paintEllipse(grid, 2, 17, 8, 4, 4);
-    paintEllipse(grid, 2, 17, 16, 4, 4);
-
-    paintRect(grid, 1, 16, 6, 16, 7);
-    paintRect(grid, 1, 16, 15, 16, 16);
     paintEllipse(grid, 3, 7, 5, 2, 3);
+    paintRect(grid, 5, 7, 7, 8, 8);
+
+    paintRect(grid, 3, 8, 9, 9, 10);
+    paintRect(grid, 3, 9, 10, 10, 11);
+    paintRect(grid, 3, 10, 11, 11, 12);
+
+    paintRect(grid, 3, 11, 9, 13, 10);
+    paintRect(grid, 3, 13, 8, 15, 9);
+
+    paintRect(grid, 3, 11, 12, 13, 13);
+    paintRect(grid, 3, 13, 14, 15, 15);
+
+    paintEllipse(grid, 2, 16, 8, 4, 4);
+    paintEllipse(grid, 2, 16, 16, 4, 4);
+
+    paintRect(grid, 1, 15, 6, 15, 7);
+    paintRect(grid, 1, 15, 14, 15, 15);
 
     return grid;
 }
 
+
 function makeMountain() {
     const grid = blankGrid();
 
-    for (let row = 5; row < 21; row++) {
-        const halfWidth = Math.floor((row - 5) * 0.85);
+    // Main mountain silhouette
+    for (let row = 5; row <= 21; row++) {
+        const halfWidth = Math.floor((row - 5) * 0.78);
+        const left = 12 - halfWidth;
+        const right = 12 + halfWidth;
 
-        for (let col = 12 - halfWidth; col <= 12 + halfWidth; col++) {
-            if (col < 0 || col >= SIZE) continue;
+        for (let col = left; col <= right; col++) {
+            if (col < 0 || col >= SIZE) {
+                continue;
+            }
 
-            let color = 3;
-            if (row < 10) color = 1;
-            else if (row < 14) color = 4;
-            else if (row > 18) color = 5;
+            let color = row >= 18 ? 5 : 3;
+
+            // Dark outline along the mountain's outer edges
+            if (col === left || col === right) {
+                color = 6;
+            }
 
             grid[row * SIZE + col] = color;
         }
     }
 
-    paintRect(grid, 1, 5, 11, 7, 13);
+    paintRect(grid, 1, 5, 11, 6, 13);
     paintRect(grid, 1, 7, 10, 8, 14);
-    paintRect(grid, 4, 8, 9, 9, 15);
-    paintRect(grid, 3, 18, 2, 22, 21);
+    paintRect(grid, 1, 9, 9, 10, 15);
+    paintRect(grid, 1, 11, 8, 12, 16);
 
+    paintRect(grid, 6, 7, 10, 7, 10);
+    paintRect(grid, 6, 8, 10, 8, 11);
+    paintRect(grid, 6, 9, 9, 9, 12);
+    paintRect(grid, 6, 10, 9, 10, 13);
+    paintRect(grid, 6, 11, 8, 11, 14);
+    paintRect(grid, 6, 12, 8, 12, 15);
+    paintRect(grid, 6, 13, 8, 13, 15);
+
+    paintRect(grid, 1, 6, 12, 6, 12);
+    paintRect(grid, 1, 7, 11, 7, 12);
+    paintRect(grid, 1, 8, 11, 8, 13);
+    paintRect(grid, 1, 9, 10, 9, 11);
+
+    paintRect(grid, 3, 19, 2, 22, 21);
+
+    return grid;
+}
+
+function makeHeart() {
+    const grid = blankGrid();
+    paintEllipse(grid, 2, 9, 8, 4, 4);
+    paintEllipse(grid, 2, 9, 16, 4, 4);
+    paintRect(grid, 2, 11, 7, 12, 16);
+    paintRect(grid, 2, 13, 9, 14, 14);
+    paintRect(grid, 2, 15, 11, 16, 12);
+    paintRect(grid, 1, 9, 7, 9, 8);
+    return grid;
+}
+
+function makeStar() {
+    const grid = blankGrid();
+    paintRect(grid, 2, 3, 11, 7, 12);
+    paintRect(grid, 2, 8, 9, 10, 14);
+    paintRect(grid, 2, 11, 6, 13, 17);
+    paintRect(grid, 2, 14, 9, 16, 14);
+    paintRect(grid, 2, 17, 11, 19, 12);
+    paintRect(grid, 1, 10, 11, 11, 12);
+    return grid;
+}
+
+function makeCloud() {
+    const grid = blankGrid();
+    paintEllipse(grid, 1, 12, 7, 4, 4);
+    paintEllipse(grid, 1, 10, 12, 5, 5);
+    paintEllipse(grid, 1, 12, 17, 4, 4);
+    paintRect(grid, 1, 12, 7, 15, 17);
+    paintRect(grid, 4, 14, 8, 14, 16);
+    return grid;
+}
+
+function makeApple() {
+    const grid = blankGrid();
+    paintEllipse(grid, 2, 14, 9, 5, 5);
+    paintEllipse(grid, 2, 14, 15, 5, 5);
+    paintRect(grid, 2, 15, 7, 16, 17);
+    paintRect(grid, 3, 7, 11, 10, 13);
+    paintEllipse(grid, 3, 7, 15, 2, 4);
+    paintEllipse(grid, 1, 11, 7, 1, 1);
+    return grid;
+}
+
+function makeFish() {
+    const grid = blankGrid();
+    paintEllipse(grid, 3, 12, 12, 6, 8);
+    paintRect(grid, 3, 10, 19, 14, 21);
+    paintRect(grid, 1, 10, 6, 10, 7);
+    paintRect(grid, 1, 10, 16, 10, 17);
+    paintEllipse(grid, 2, 10, 11, 1, 1);
+    paintRect(grid, 6, 13, 10, 13, 14);
+    return grid;
+}
+
+function makeSun() {
+    const grid = blankGrid();
+    paintEllipse(grid, 2, 12, 12, 5, 5);
+    paintRect(grid, 3, 3, 11, 6, 12);
+    paintRect(grid, 3, 18, 11, 21, 12);
+    paintRect(grid, 3, 10, 2, 13, 5);
+    paintRect(grid, 3, 10, 19, 13, 22);
+    paintRect(grid, 3, 6, 6, 7, 7);
+    paintRect(grid, 3, 6, 16, 7, 17);
+    paintRect(grid, 3, 17, 6, 18, 7);
+    paintRect(grid, 3, 17, 16, 18, 17);
+    paintEllipse(grid, 1, 11, 10, 1, 1);
+    paintEllipse(grid, 1, 11, 14, 1, 1);
+    return grid;
+}
+
+function makeHouse() {
+    const grid = blankGrid();
+    paintRect(grid, 3, 10, 5, 19, 18);
+    paintRect(grid, 2, 5, 10, 9, 14);
+    paintRect(grid, 2, 6, 8, 8, 16);
+    paintRect(grid, 4, 14, 10, 17, 13);
+    paintRect(grid, 1, 12, 6, 14, 8);
+    paintRect(grid, 1, 12, 16, 14, 18);
+    paintRect(grid, 5, 15, 16, 17, 18);
+    return grid;
+}
+
+function makeCactus() {
+    const grid = blankGrid();
+    paintRect(grid, 3, 5, 11, 13, 13);
+    paintRect(grid, 3, 10, 7, 12, 10);
+    paintRect(grid, 3, 8, 5, 10, 7);
+    paintRect(grid, 3, 13, 14, 15, 16);
+    paintRect(grid, 3, 11, 16, 13, 18);
+    paintRect(grid, 4, 20, 7, 20, 16);
+    paintRect(grid, 1, 7, 12, 8, 12);
+    return grid;
+}
+
+function makeTurtle() {
+    const grid = blankGrid();
+    paintEllipse(grid, 3, 13, 12, 6, 5);
+    paintEllipse(grid, 3, 13, 18, 3, 3);
+    paintRect(grid, 4, 17, 10, 18, 10);
+    paintRect(grid, 4, 17, 14, 18, 14);
+    paintRect(grid, 4, 19, 11, 20, 12);
+    paintRect(grid, 4, 19, 14, 20, 15);
+    paintRect(grid, 1, 12, 18, 12, 18);
+    paintRect(grid, 1, 13, 17, 13, 17);
+    return grid;
+}
+
+function makeGhost() {
+    const grid = blankGrid();
+    paintEllipse(grid, 1, 10, 12, 7, 6);
+    paintRect(grid, 1, 10, 6, 16, 18);
+    paintRect(grid, 1, 17, 7, 17, 9);
+    paintRect(grid, 1, 17, 12, 17, 14);
+    paintRect(grid, 1, 17, 17, 17, 18);
+    paintRect(grid, 6, 9, 10, 9, 10);
+    paintRect(grid, 6, 9, 14, 9, 14);
+    return grid;
+}
+
+
+function makePineTree() {
+    const grid = blankGrid();
+
+    paintRect(grid, 3, 2, 9, 7, 14);
+    paintRect(grid, 3, 3, 7, 9, 16);
+
+    paintRect(grid, 3, 6, 5, 12, 18);
+    paintRect(grid, 3, 7, 4, 14, 19);
+
+    paintRect(grid, 3, 10, 2, 16, 21);
+    paintRect(grid, 3, 11, 1, 18, 22);
+
+    paintRect(grid, 3, 14, 0, 20, 23);
+    paintRect(grid, 3, 16, 0, 21, 23);
+
+    paintRect(grid, 3, 4, 8, 4, 15);
+    paintRect(grid, 3, 8, 5, 8, 18);
+    paintRect(grid, 3, 12, 2, 12, 21);
+    paintRect(grid, 3, 16, 1, 16, 22);
+
+    paintRect(grid, 5, 19, 10, 23, 13);
+
+    paintRect(grid, 1, 5, 10, 5, 12);
+    paintRect(grid, 1, 9, 7, 9, 10);
+    paintRect(grid, 1, 13, 4, 13, 7);
+    paintRect(grid, 1, 17, 2, 17, 5);
+
+    return grid;
+}
+
+
+function makeIceCream() {
+    const grid = blankGrid();
+    paintEllipse(grid, 2, 8, 12, 5, 5);
+    paintEllipse(grid, 3, 13, 12, 4, 4);
+    paintRect(grid, 3, 16, 10, 17, 14);
+    paintRect(grid, 3, 18, 11, 16, 13);
+    paintEllipse(grid, 1, 8, 10, 1, 1);
+    return grid;
+}
+
+function makePizza() {
+    const grid = blankGrid();
+
+    for (let row = 5; row < 20; row++) {
+        const width = row - 5;
+
+        for (let col = 12 - width; col <= 12 + width; col++) {
+            if (col >= 0 && col < SIZE) {
+                grid[row * SIZE + col] = row < 8 ? 3 : 2;
+            }
+        }
+    }
+
+    paintEllipse(grid, 4, 10, 10, 1, 1);
+    paintEllipse(grid, 4, 12, 15, 1, 1);
+    paintEllipse(grid, 4, 15, 11, 1, 1);
+    paintRect(grid, 3, 19, 10, 19, 14);
+
+    return grid;
+}
+
+function makeRocket() {
+    const grid = blankGrid();
+    paintEllipse(grid, 1, 7, 12, 3, 3);
+    paintRect(grid, 1, 8, 10, 15, 14);
+    paintRect(grid, 3, 15, 8, 17, 10);
+    paintRect(grid, 3, 15, 15, 17, 17);
+    paintRect(grid, 2, 17, 11, 18, 13);
+    paintRect(grid, 4, 19, 11, 19, 13);
+    paintEllipse(grid, 3, 8, 12, 1, 1);
+    return grid;
+}
+
+function makeCupcake() {
+    const grid = blankGrid();
+    paintEllipse(grid, 2, 8, 12, 4, 5);
+    paintRect(grid, 3, 12, 8, 16, 16);
+    paintRect(grid, 3, 17, 9, 18, 15);
+    paintRect(grid, 4, 13, 11, 13, 11);
+    paintRect(grid, 4, 15, 13, 15, 13);
+    paintEllipse(grid, 1, 7, 11, 1, 1);
+    return grid;
+}
+
+function makeMoon() {
+    const grid = blankGrid();
+    paintEllipse(grid, 3, 12, 12, 8, 7);
+    paintEllipse(grid, 4, 9, 15, 7, 6);
+    paintEllipse(grid, 2, 7, 7, 1, 1);
+    paintEllipse(grid, 2, 17, 6, 1, 1);
     return grid;
 }
 
@@ -245,11 +467,27 @@ const ARTWORKS = [
     { id: "frog", name: "Happy Frog", subtitle: "A pond-side pal", make: makeFrog, bg: "#e0f6df" },
     { id: "butterfly", name: "Butterfly", subtitle: "Fluttering by", make: makeButterfly, bg: "#e4edff" },
     { id: "cherries", name: "Cherries", subtitle: "A sweet pair", make: makeCherries, bg: "#ffe4ec" },
-    { id: "mountain", name: "Snowy Mountain", subtitle: "A little adventure", make: makeMountain, bg: "#e4f5ff" }
+    { id: "mountain", name: "Snowy Mountain", subtitle: "A little adventure", make: makeMountain, bg: "#e4f5ff" },
+    { id: "heart", name: "Pixel Heart", subtitle: "Made with love", make: makeHeart, bg: "#fbe6f2" },
+    { id: "star", name: "Shooting Star", subtitle: "A little sparkle", make: makeStar, bg: "#fff4d9" },
+    { id: "cloud", name: "Fluffy Cloud", subtitle: "A soft little cloud", make: makeCloud, bg: "#e4f5ff" },
+    { id: "apple", name: "Apple", subtitle: "A tasty treat", make: makeApple, bg: "#ffe4ec" },
+    { id: "fish", name: "Little Fish", subtitle: "Swimming along", make: makeFish, bg: "#e4edff" },
+    { id: "sun", name: "Sunny Day", subtitle: "Let the sun shine", make: makeSun, bg: "#fff4d9" },
+    { id: "house", name: "Cozy House", subtitle: "A place to call home", make: makeHouse, bg: "#ffe9e0" },
+    { id: "cactus", name: "Cactus", subtitle: "A tiny desert plant", make: makeCactus, bg: "#e0f6df" },
+    { id: "turtle", name: "Little Turtle", subtitle: "Take it slow", make: makeTurtle, bg: "#e0f6df" },
+    { id: "ghost", name: "Friendly Ghost", subtitle: "A spooky pal", make: makeGhost, bg: "#e4f5ff" },
+    { id: "tree", name: "Pine Tree", subtitle: "A forest friend", make: makePineTree, bg: "#e0f6df" },
+    { id: "icecream", name: "Ice Cream", subtitle: "A sweet scoop", make: makeIceCream, bg: "#fbe6f2" },
+    { id: "pizza", name: "Pizza Slice", subtitle: "Fresh from the oven", make: makePizza, bg: "#fff4d9" },
+    { id: "rocket", name: "Rocket Ship", subtitle: "Off to space", make: makeRocket, bg: "#e4edff" },
+    { id: "cupcake", name: "Cupcake", subtitle: "A tiny dessert", make: makeCupcake, bg: "#fbe6f2" },
+    { id: "moon", name: "Crescent Moon", subtitle: "A quiet night", make: makeMoon, bg: "#e4f5ff" }
 ];
 
 // --------------------------------------------------
-// DOM REFERENCES
+// DOM AND STATE
 // --------------------------------------------------
 
 const gallery = $("#gallery");
@@ -259,26 +497,18 @@ const progressLabel = $("#progress-label");
 const progressBar = $("#progress-bar");
 const toast = $("#toast");
 
-// --------------------------------------------------
-// GAME STATE
-// --------------------------------------------------
-
 let currentArtwork = ARTWORKS[0];
 let targetGrid = currentArtwork.make();
-
-// Map: pixel index -> the color the player actually used.
 let coloredCells = new Map();
-
 let selectedColor = 1;
 let activeTool = "color";
 let galleryPage = 0;
 let galleryFilter = "all";
 let toastTimeout;
 
-let favorites = new Set(readJSON(FAVORITES_KEY, []));
-let savedProgress = readJSON(STORAGE_KEY, {});
+const favorites = new Set(readJSON(FAVORITES_KEY, []));
+const savedProgress = readJSON(STORAGE_KEY, {});
 
-// Drag state: listeners live on the grid, not individual pixels.
 let isPainting = false;
 let activePointerId = null;
 let lastPaintedIndex = null;
@@ -306,7 +536,6 @@ function loadSavedPixels(artwork) {
     if (!Array.isArray(saved)) return result;
 
     for (const entry of saved) {
-        // New format: [pixelIndex, chosenColorId]
         if (
             Array.isArray(entry) &&
             Number.isInteger(entry[0]) &&
@@ -316,13 +545,6 @@ function loadSavedPixels(artwork) {
             PALETTE.some(color => color.id === entry[1])
         ) {
             result.set(entry[0], entry[1]);
-        } else if (
-            // Older format: a list of pixel indices.
-            Number.isInteger(entry) &&
-            entry >= 0 &&
-            entry < SIZE * SIZE
-        ) {
-            result.set(entry, artwork.make()[entry]);
         }
     }
 
@@ -335,7 +557,6 @@ function loadArtwork(artwork) {
     currentArtwork = artwork;
     targetGrid = artwork.make();
     coloredCells = loadSavedPixels(artwork);
-
     selectedColor = findFirstUnfinishedColor() ?? 1;
     activeTool = "color";
 
@@ -350,42 +571,43 @@ function loadArtwork(artwork) {
     renderGrid();
     updateProgress();
     updateCompletion();
-
-    $("#status-message").textContent =
-        "Choose any color, then click or drag across the squares!";
 }
 
 function findFirstUnfinishedColor() {
     for (const color of PALETTE) {
-        const hasRemainingPixel = targetGrid.some(
+        if (targetGrid.some(
             (correctColor, index) =>
-                correctColor === color.id && coloredCells.get(index) !== correctColor
-        );
-
-        if (hasRemainingPixel) return color.id;
+                correctColor === color.id &&
+                coloredCells.get(index) !== correctColor
+        )) {
+            return color.id;
+        }
     }
 
     return null;
 }
 
 // --------------------------------------------------
-// GALLERY AND FAVORITES
+// GALLERY
 // --------------------------------------------------
+
+function getGalleryItems() {
+    return galleryFilter === "favorites"
+        ? ARTWORKS.filter(artwork => favorites.has(artwork.id))
+        : ARTWORKS;
+}
 
 function renderGallery() {
     gallery.innerHTML = "";
 
-    const items = galleryFilter === "favorites"
-        ? ARTWORKS.filter(artwork => favorites.has(artwork.id))
-        : ARTWORKS;
+    const items = getGalleryItems();
+    const pageCount = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
 
-    const pageSize = 8;
-    const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
-    galleryPage = Math.min(galleryPage, pageCount - 1);
+    galleryPage = Math.max(0, Math.min(galleryPage, pageCount - 1));
 
     const pageItems = items.slice(
-        galleryPage * pageSize,
-        (galleryPage + 1) * pageSize
+        galleryPage * PAGE_SIZE,
+        (galleryPage + 1) * PAGE_SIZE
     );
 
     pageItems.forEach(artwork => {
@@ -393,7 +615,6 @@ function renderGallery() {
         card.type = "button";
         card.className =
             `art-card${artwork.id === currentArtwork.id ? " selected" : ""}`;
-        card.setAttribute("aria-label", `Choose ${artwork.name}`);
 
         const canvas = document.createElement("canvas");
         canvas.width = SIZE;
@@ -404,17 +625,14 @@ function renderGallery() {
         name.className = "art-name";
         name.textContent = artwork.name;
 
-        const favoriteButton = document.createElement("span");
-        favoriteButton.className =
+        const favorite = document.createElement("span");
+        favorite.className =
             `favorite-toggle${favorites.has(artwork.id) ? " is-favorite" : ""}`;
-        favoriteButton.textContent = favorites.has(artwork.id) ? "♥" : "♡";
-        favoriteButton.setAttribute("role", "button");
-        favoriteButton.setAttribute(
-            "aria-label",
-            favorites.has(artwork.id) ? "Remove favorite" : "Add favorite"
-        );
+        favorite.textContent = favorites.has(artwork.id) ? "♥" : "♡";
+        favorite.setAttribute("role", "button");
+        favorite.setAttribute("aria-label", "Toggle favorite");
 
-        favoriteButton.addEventListener("click", event => {
+        favorite.addEventListener("click", event => {
             event.stopPropagation();
 
             if (favorites.has(artwork.id)) {
@@ -427,8 +645,13 @@ function renderGallery() {
             renderGallery();
         });
 
-        card.append(canvas, name, favoriteButton);
-        card.addEventListener("click", () => loadArtwork(artwork));
+        card.append(canvas, name, favorite);
+
+        card.addEventListener("click", () => {
+            loadArtwork(artwork);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
         gallery.append(card);
     });
 
@@ -441,6 +664,7 @@ function drawPreview(canvas, artwork) {
     const context = canvas.getContext("2d");
     const data = artwork.make();
 
+    context.imageSmoothingEnabled = false;
     context.fillStyle = artwork.bg;
     context.fillRect(0, 0, SIZE, SIZE);
 
@@ -449,13 +673,52 @@ function drawPreview(canvas, artwork) {
         const col = index % SIZE;
         const color = PALETTE.find(item => item.id === colorId);
 
-        context.fillStyle = color ? color.color : "#ffffff";
+        if (!color) return;
+
+        context.fillStyle = color.color;
         context.fillRect(col, row, 1, 1);
     });
+
+    context.strokeStyle = "rgba(64, 81, 107, 0.12)";
+    context.lineWidth = 0.035;
+
+    for (let row = 0; row < SIZE; row++) {
+        for (let col = 0; col < SIZE; col++) {
+            if (data[row * SIZE + col] !== 4) {
+                context.strokeRect(col, row, 1, 1);
+            }
+        }
+    }
+}
+
+function changeGalleryPage(direction) {
+    const pageCount = Math.max(
+        1,
+        Math.ceil(getGalleryItems().length / PAGE_SIZE)
+    );
+
+    galleryPage = Math.max(
+        0,
+        Math.min(pageCount - 1, galleryPage + direction)
+    );
+
+    renderGallery();
+}
+
+function showPreviousArtwork() {
+    const currentIndex = ARTWORKS.findIndex(
+        artwork => artwork.id === currentArtwork.id
+    );
+
+    const previousIndex =
+        (currentIndex - 1 + ARTWORKS.length) % ARTWORKS.length;
+
+    loadArtwork(ARTWORKS[previousIndex]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 // --------------------------------------------------
-// COLOR PALETTE
+// PALETTE
 // --------------------------------------------------
 
 function renderPalette() {
@@ -465,7 +728,7 @@ function renderPalette() {
         const remaining = targetGrid.reduce((total, correctColor, index) => {
             return total + (
                 correctColor === color.id &&
-                    coloredCells.get(index) !== correctColor ? 1 : 0
+                coloredCells.get(index) !== correctColor ? 1 : 0
             );
         }, 0);
 
@@ -473,10 +736,6 @@ function renderPalette() {
         button.type = "button";
         button.className =
             `palette-item${selectedColor === color.id && activeTool === "color" ? " active" : ""}`;
-        button.setAttribute(
-            "aria-pressed",
-            String(selectedColor === color.id && activeTool === "color")
-        );
 
         const number = document.createElement("span");
         number.className = "palette-number";
@@ -487,7 +746,6 @@ function renderPalette() {
         swatch.style.backgroundColor = color.color;
 
         const details = document.createElement("span");
-
         const name = document.createElement("span");
         name.className = "palette-name";
         name.textContent = color.name;
@@ -507,8 +765,6 @@ function renderPalette() {
             $("#fill-button").classList.add("primary");
 
             renderPalette();
-            $("#status-message").textContent =
-                `Color ${color.id}: ${color.name}. Paint any square you like.`;
         });
 
         paletteList.append(button);
@@ -516,7 +772,7 @@ function renderPalette() {
 }
 
 // --------------------------------------------------
-// PIXEL GRID
+// COLORING GRID
 // --------------------------------------------------
 
 function renderGrid() {
@@ -526,15 +782,14 @@ function renderGrid() {
 
     const fragment = document.createDocumentFragment();
 
-    targetGrid.forEach((correctColor, index) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "pixel";
-        button.setAttribute("role", "gridcell");
-        button.dataset.index = index;
+    targetGrid.forEach((_, index) => {
+        const pixel = document.createElement("button");
+        pixel.type = "button";
+        pixel.className = "pixel";
+        pixel.dataset.index = index;
 
-        updatePixelButton(index, button);
-        fragment.append(button);
+        updatePixelButton(index, pixel);
+        fragment.append(pixel);
     });
 
     gridElement.append(fragment);
@@ -560,11 +815,10 @@ function updatePixelButton(index, suppliedButton = null) {
     );
 
     button.textContent = isColored ? "" : targetGrid[index];
-
     button.setAttribute(
         "aria-label",
         isColored
-            ? `Pixel ${index + 1}, painted ${color?.name || "color"}${chosenColor === targetGrid[index] ? ", correct" : ", incorrect"}`
+            ? `Pixel ${index + 1}, ${color?.name || "color"}`
             : `Pixel ${index + 1}, target color ${targetGrid[index]}`
     );
 }
@@ -578,12 +832,9 @@ function colorPixel(index) {
 
     if (activeTool === "eraser") {
         if (oldColor === undefined) return;
-
         coloredCells.delete(index);
     } else {
-        // Free coloring: any selected color can be used on any square.
         if (oldColor === selectedColor) return;
-
         coloredCells.set(index, selectedColor);
     }
 
@@ -592,18 +843,14 @@ function colorPixel(index) {
 }
 
 // --------------------------------------------------
-// RELIABLE CLICK-AND-DRAG PAINTING
+// DRAG PAINTING
 // --------------------------------------------------
-
-// Use pointer events so mouse, pen, and touch can work.
-// Event delegation means re-rendering pixels won't add duplicate listeners.
 
 function getPixelFromPoint(x, y) {
     const element = document.elementFromPoint(x, y);
     const pixel = element?.closest(".pixel");
 
-    if (!pixel || !gridElement.contains(pixel)) return null;
-    return pixel;
+    return pixel && gridElement.contains(pixel) ? pixel : null;
 }
 
 function paintAtPoint(x, y) {
@@ -624,6 +871,8 @@ function stopPainting() {
     lastDragPoint = null;
 }
 
+gridElement.style.touchAction = "none";
+
 gridElement.addEventListener("pointerdown", event => {
     if (event.button !== undefined && event.button !== 0) return;
 
@@ -639,9 +888,7 @@ gridElement.addEventListener("pointerdown", event => {
 
     try {
         gridElement.setPointerCapture(event.pointerId);
-    } catch {
-        // Pointer capture may not be available in every browser context.
-    }
+    } catch {}
 
     paintAtPoint(event.clientX, event.clientY);
 });
@@ -653,15 +900,14 @@ gridElement.addEventListener("pointermove", event => {
 
     const current = { x: event.clientX, y: event.clientY };
 
-    // Sample between pointer positions so fast drags don't skip small squares.
     if (lastDragPoint) {
         const dx = current.x - lastDragPoint.x;
         const dy = current.y - lastDragPoint.y;
-        const distance = Math.hypot(dx, dy);
-        const steps = Math.max(1, Math.ceil(distance / 4));
+        const steps = Math.max(1, Math.ceil(Math.hypot(dx, dy) / 4));
 
         for (let step = 1; step <= steps; step++) {
             const ratio = step / steps;
+
             paintAtPoint(
                 lastDragPoint.x + dx * ratio,
                 lastDragPoint.y + dy * ratio
@@ -680,15 +926,11 @@ gridElement.addEventListener("pointerup", event => {
 
 gridElement.addEventListener("pointercancel", stopPainting);
 gridElement.addEventListener("lostpointercapture", stopPainting);
-
 window.addEventListener("pointerup", stopPainting);
 window.addEventListener("blur", stopPainting);
 
-// Prevent the browser's default touch scrolling while painting.
-gridElement.style.touchAction = "none";
-
 // --------------------------------------------------
-// PROGRESS AND COMPLETION
+// PROGRESS
 // --------------------------------------------------
 
 function afterColorChange() {
@@ -699,111 +941,27 @@ function afterColorChange() {
 }
 
 function updateProgress() {
-    const total = targetGrid.length;
     const colored = coloredCells.size;
+    const total = targetGrid.length;
 
     progressLabel.textContent = `${colored} / ${total}`;
     progressBar.style.width = `${(colored / total) * 100}%`;
 }
 
 function updateCompletion() {
-    const isComplete = targetGrid.every(
+    const complete = targetGrid.every(
         (correctColor, index) => coloredCells.get(index) === correctColor
     );
 
-    $("#completion-banner").hidden = !isComplete;
+    $("#completion-banner").hidden = !complete;
 
-    if (isComplete) {
-        $("#status-message").textContent =
-            "You did it! Every pixel matches the picture!";
-        showToast("Picture complete! You're a pixel artist!");
-    } else {
-        const incorrect = [...coloredCells.entries()].filter(
-            ([index, chosenColor]) => chosenColor !== targetGrid[index]
-        ).length;
-
-        $("#status-message").textContent = incorrect
-            ? `${incorrect} square${incorrect === 1 ? "" : "s"} ${incorrect === 1 ? "needs" : "need"} a different color to complete the picture.`
-            : "Keep coloring! You can choose any color for any square.";
-    }
+    $("#status-message").textContent = complete
+        ? "You did it! Every pixel matches the picture!"
+        : "Keep coloring! Choose any color and paint the squares.";
 }
 
 // --------------------------------------------------
-// FILL, ERASER, AND RESET
-// --------------------------------------------------
-
-function fillSelectedColor() {
-    let changed = 0;
-
-    targetGrid.forEach((correctColor, index) => {
-        if (correctColor === selectedColor &&
-            coloredCells.get(index) !== selectedColor) {
-            coloredCells.set(index, selectedColor);
-            changed++;
-        }
-    });
-
-    if (!changed) {
-        showToast("All target squares for this color are already filled.");
-        return;
-    }
-
-    saveProgress();
-    renderGrid();
-    renderPalette();
-    updateProgress();
-    updateCompletion();
-
-    showToast(`Filled ${changed} square${changed === 1 ? "" : "s"} with ${PALETTE[selectedColor - 1].name}.`);
-}
-
-function resetArtwork() {
-    if (coloredCells.size === 0) {
-        showToast("This picture is already blank.");
-        return;
-    }
-
-    stopPainting();
-    coloredCells.clear();
-    delete savedProgress[currentArtwork.id];
-
-    saveProgress();
-    renderGrid();
-    renderPalette();
-    updateProgress();
-
-    $("#completion-banner").hidden = true;
-    $("#status-message").textContent =
-        "Fresh canvas! Start coloring whenever you're ready.";
-
-    showToast("Picture reset. A fresh start!");
-}
-
-function toggleEraser() {
-    stopPainting();
-
-    activeTool = activeTool === "eraser" ? "color" : "eraser";
-
-    $("#eraser-button").classList.toggle(
-        "active-tool",
-        activeTool === "eraser"
-    );
-    $("#fill-button").classList.toggle(
-        "primary",
-        activeTool !== "eraser"
-    );
-
-    renderPalette();
-
-    $("#status-message").textContent = activeTool === "eraser"
-        ? "Eraser selected. Click or drag over squares to erase them."
-        : "Choose a color, then click or drag to paint.";
-
-    showToast(activeTool === "eraser" ? "Eraser ready!" : "Coloring tool ready!");
-}
-
-// --------------------------------------------------
-// HINTS AND TOASTS
+// TOOLS
 // --------------------------------------------------
 
 function showToast(message) {
@@ -817,11 +975,76 @@ function showToast(message) {
     }, 2300);
 }
 
+function fillSelectedColor() {
+    let changed = 0;
+
+    targetGrid.forEach((correctColor, index) => {
+        if (
+            correctColor === selectedColor &&
+            coloredCells.get(index) !== selectedColor
+        ) {
+            coloredCells.set(index, selectedColor);
+            changed++;
+        }
+    });
+
+    if (!changed) {
+        showToast("No squares left for this color!");
+        return;
+    }
+
+    saveProgress();
+    renderGrid();
+    renderPalette();
+    updateProgress();
+    updateCompletion();
+
+    showToast(`Filled ${changed} squares.`);
+}
+
+function resetArtwork() {
+    if (!coloredCells.size) {
+        showToast("This picture is already blank.");
+        return;
+    }
+
+    stopPainting();
+    coloredCells.clear();
+    delete savedProgress[currentArtwork.id];
+
+    saveProgress();
+    renderGrid();
+    renderPalette();
+    updateProgress();
+    updateCompletion();
+
+    showToast("Picture reset!");
+}
+
+function toggleEraser() {
+    stopPainting();
+
+    activeTool = activeTool === "eraser" ? "color" : "eraser";
+
+    $("#eraser-button").classList.toggle(
+        "active-tool",
+        activeTool === "eraser"
+    );
+
+    $("#fill-button").classList.toggle(
+        "primary",
+        activeTool !== "eraser"
+    );
+
+    renderPalette();
+    showToast(activeTool === "eraser" ? "Eraser selected!" : "Coloring tool selected!");
+}
+
 function showHint() {
     let index = targetGrid.findIndex(
-        (correctColor, i) =>
-            correctColor === selectedColor &&
-            coloredCells.get(i) !== correctColor
+        (color, i) =>
+            color === selectedColor &&
+            coloredCells.get(i) !== color
     );
 
     if (index === -1) {
@@ -834,15 +1057,12 @@ function showHint() {
 
         selectedColor = nextColor;
         activeTool = "color";
-
-        $("#eraser-button").classList.remove("active-tool");
-        $("#fill-button").classList.add("primary");
         renderPalette();
 
         index = targetGrid.findIndex(
-            (correctColor, i) =>
-                correctColor === selectedColor &&
-                coloredCells.get(i) !== correctColor
+            (color, i) =>
+                color === selectedColor &&
+                coloredCells.get(i) !== color
         );
     }
 
@@ -860,11 +1080,11 @@ function showHint() {
         pixel.classList.add("correct-flash");
     }
 
-    showToast(`Hint: look for a square whose target number is ${selectedColor}.`);
+    showToast(`Look for a square numbered ${selectedColor}.`);
 }
 
 // --------------------------------------------------
-// BUTTON EVENTS
+// BUTTONS
 // --------------------------------------------------
 
 $("#fill-button").addEventListener("click", () => {
@@ -884,28 +1104,16 @@ $("#keep-coloring").addEventListener("click", () => {
 });
 
 $("#prev-page").addEventListener("click", () => {
-    galleryPage = Math.max(0, galleryPage - 1);
-    renderGallery();
+    changeGalleryPage(-1);
 });
 
 $("#next-page").addEventListener("click", () => {
-    const items = galleryFilter === "favorites"
-        ? ARTWORKS.filter(artwork => favorites.has(artwork.id))
-        : ARTWORKS;
-
-    const lastPage = Math.max(0, Math.ceil(items.length / 8) - 1);
-    galleryPage = Math.min(lastPage, galleryPage + 1);
-    renderGallery();
+    changeGalleryPage(1);
 });
 
-$("#back-to-gallery").addEventListener("click", () => {
-    $(".gallery-panel").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
+// Previous picture button wraps around to the final artwork.
 
-    showToast("Choose another picture from the gallery.");
-});
+$("#back-to-gallery").addEventListener("click", showPreviousArtwork);
 
 document.querySelectorAll(".filter-tab").forEach(button => {
     button.addEventListener("click", () => {
@@ -917,10 +1125,6 @@ document.querySelectorAll(".filter-tab").forEach(button => {
         });
 
         renderGallery();
-
-        if (galleryFilter === "favorites" && favorites.size === 0) {
-            showToast("Tap the heart on a picture to favorite it.");
-        }
     });
 });
 
@@ -929,7 +1133,6 @@ document.querySelectorAll(".filter-tab").forEach(button => {
 // --------------------------------------------------
 
 document.addEventListener("keydown", event => {
-    // Ignore shortcuts while typing into an input.
     if (event.target.matches("input, textarea, select")) return;
 
     if (/^[1-6]$/.test(event.key)) {
@@ -938,6 +1141,7 @@ document.addEventListener("keydown", event => {
 
         $("#eraser-button").classList.remove("active-tool");
         $("#fill-button").classList.add("primary");
+
         renderPalette();
     }
 
@@ -950,7 +1154,7 @@ document.addEventListener("keydown", event => {
 });
 
 // --------------------------------------------------
-// START GAME
+// INITIALIZE
 // --------------------------------------------------
 
 loadArtwork(currentArtwork);
